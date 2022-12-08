@@ -1,9 +1,10 @@
-from starlette import status
-from categories.schemas import CategoryResult, CategoryListResult, Category
-from model.check_data import is_blank
-from config import mydb
-from slugify import slugify
 from fastapi import APIRouter, Response
+from slugify import slugify
+from starlette import status
+
+from config import mydb
+from model.check_data import is_blank
+from schemas import CategoryResult, CategoryListResult, Category
 
 category_router = APIRouter()
 

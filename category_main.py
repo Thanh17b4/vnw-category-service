@@ -1,6 +1,6 @@
 import uvicorn
 from fastapi import FastAPI
-from categories.category import category_router
+from category import category_router
 
 app = FastAPI()
 
