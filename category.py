@@ -2,14 +2,14 @@ from fastapi import APIRouter, Response
 from slugify import slugify
 from starlette import status
 
-from config import mydb
+from db import mydb
 from model.check_data import is_blank
 from schemas import CategoryResult, CategoryListResult, Category
 
 category_router = APIRouter()
 
 
-@category_router.post('/category/create/', status_code=201)
+@category_router.post('/category', status_code=201)
 def create_category(request: Category, response: Response):
     category = request.category_to_dict()
     # Validate data
@@ -34,7 +34,7 @@ def __validate(req: dict):
     return req, ""
 
 
-@category_router.get('/category/detail/{id}', status_code=200)
+@category_router.get('/category/{id}', status_code=200)
 def detail_category(id: int, response: Response):
     with mydb:
         my_cursor = mydb.cursor()
@@ -46,7 +46,7 @@ def detail_category(id: int, response: Response):
         return True, CategoryResult(category)
 
 
-@category_router.get('/category/all/', status_code=200)
+@category_router.get('/category', status_code=200)
 def all_category(page: int, limit: int, response: Response):
     with mydb:
         my_cursor = mydb.cursor()
@@ -69,7 +69,7 @@ def all_category(page: int, limit: int, response: Response):
         return CategoryListResult(categories)
 
 
-@category_router.put('/category/update/{id}', status_code=200)
+@category_router.put('/category/{id}', status_code=200)
 async def update_category(id: int, req: Category, response: Response):
     category = req.category_to_dict()
     boolean, result = detail_category(id, response)
@@ -96,7 +96,7 @@ def __check_changes(req: dict, new_req: dict):
     return new_req, ""
 
 
-@category_router.delete('/category/delete/{id}', status_code=200)
+@category_router.delete('/category/{id}', status_code=200)
 async def delete_category(id: int, response: Response):
     boolean, result = detail_category(id, response)
     if boolean is False:
